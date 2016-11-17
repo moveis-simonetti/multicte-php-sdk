@@ -3,6 +3,7 @@
 namespace Tests\IntegracaoCTe;
 
 
+use phpDocumentor\Reflection\Types\Integer;
 use Simonetti\MultiCTe\Soap\AlterarCTe;
 use Simonetti\MultiCTe\Soap\cte;
 use Simonetti\MultiCTe\Soap\IntegracaoCTe;
@@ -19,313 +20,484 @@ use Simonetti\MultiCTe\Soap\QuantidadesCarga;
 use Simonetti\MultiCTe\Soap\Seguro;
 use Simonetti\MultiCTe\Soap\Veiculo;
 
-class IntegracaoCteTest
+class IntegracaoCteTest extends \PHPUnit_Framework_TestCase
 {
-    public function testIntegrarCTe()
+    /**
+     * @var ConhecimentoDeTransporteEletronico
+     */
+    private $conhecimentoDeTransporteEletronico;
+
+    /**
+     * @var IntegracaoCTe
+     */
+    private $integracaoCTe;
+
+    /**
+     * @var string
+     */
+    private $token;
+
+    public function setUp()
     {
-        try {
-            $integrarCTe = new IntegrarCTe();
-
-            $integrarCTe->cte = new cte();
-
-            $integrarCTe->cte->CFOP = 6932;
-            $integrarCTe->cte->CodigoIBGECidadeInicioPrestacao = 3204104;
-            $integrarCTe->cte->CodigoIBGECidadeTerminoPrestacao = 1504422;
-
-            $componentesPrestacao = new ComponentesDaPrestacao();
-            $componentesPrestacao->Descricao = 'PEDAGIO';
-            $componentesPrestacao->IncluiBaseCalculoICMS = 'true';
-            $componentesPrestacao->IncluiValorAReceber = 'true';
-            $componentesPrestacao->Valor = 0.0;
-
-            $integrarCTe->cte->ComponentesDaPrestacao = $componentesPrestacao;
-
-            $integrarCTe->cte->DataPrevistaEntrega = '15/11/2016';
-
-            $destinatario = new Cliente();
-            $destinatario->Bairro = 'JDIM STA FRANCISCA';
-            $destinatario->CEP = '67200000';
-            $destinatario->CPFCNPJ = '01838723026355';
-            $destinatario->CodigoAtividade = 2;
-            $destinatario->CodigoIBGECidade = 1504422;
-            $destinatario->CodigoPais = 1058;
-            $destinatario->Endereco = 'RUA DO URIBOCA VELHA';
-            $destinatario->Exportacao = false;
-            $destinatario->NomeFantasia = 'BRF S.A. FILIAL DE VENDAS BELE';
-            $destinatario->Numero = '1158';
-            $destinatario->IE = '152823697';
-            $destinatario->RazaoSocial = 'BRF S.A';
-
-            $integrarCTe->cte->Destinatario = $destinatario;
-
-            $documento = new Documentos();
-            $documento->ChaveNFE = '35160207170943004603551000001769801046971548';
-            $documento->DataEmissao = '05/02/2016 13:32:33';
-            $documento->Numero = 176980;
-            $documento->Valor = 72554.04;
-
-            $integrarCTe->cte->Documentos = [$documento];
-
-            $emitente = new Empresa();
-            $emitente->Atualizar = false;
-            $emitente->CNPJ = '25255622000191';
-
-            $integrarCTe->cte->Emitente = $emitente;
-
-            $icms = new Imposto();
-            $icms->Aliquota = 12.00;
-            $icms->BaseCalculo = 1540.32;
-            $icms->CST = '00';
-            $icms->Valor = 184.84;
-
-            $integrarCTe->cte->ICMS = $icms;
-
-            $integrarCTe->cte->IncluirICMSNoFrete = 'Nao';
-
-            $integrarCTe->cte->Lotacao = 'Sim';
-
-            $motorista = new Motorista();
-            $motorista->CPF = '03911009550';
-            $motorista->Nome = 'FABRICIO BARBOSA';
-
-            $integrarCTe->cte->Motoristas = [$motorista];
-
-            $integrarCTe->cte->NumeroCarga = 5213;
-            $integrarCTe->cte->NumeroUnidade = 10;
-
-            $integrarCTe->cte->ObservacoesGerais = 'N.F.: 176980 CNF: 182071 CARGA: 537837 - CTE DE TESTE';
-            $integrarCTe->cte->ProdutoPredominante = 'DIVERSOS';
-
-            $quantidadesCarga = new QuantidadesCarga();
-            $quantidadesCarga->Descricao = 'Kilogramas';
-            $quantidadesCarga->Quantidade = 1000;
-            $quantidadesCarga->UnidadeMedida = '01';
-
-            $integrarCTe->cte->QuantidadesCarga = [$quantidadesCarga];
-
-            $remetente = new Cliente();
-            $remetente->Bairro = 'CENTRO';
-            $remetente->CEP = '29980000';
-            $remetente->CPFCNPJ = '31743818000128';
-            $remetente->CodigoAtividade = 3;
-            $remetente->CodigoIBGECidade = 3204104;
-            $remetente->CodigoPais = 1058;
-            $remetente->Endereco = 'R CARLOS CASTRO';
-            $remetente->Exportacao = 0;
-            $remetente->NomeFantasia = 'MOVEIS SIMONETTI';
-            $remetente->Numero = '245 A';
-            $remetente->IE = '081219199';
-            $remetente->RazaoSocial = 'LOJAS SIMONETTI LTDA';
-
-            $integrarCTe->cte->Remetente = $remetente;
-
-            $retira = 'Nao';
-            $integrarCTe->cte->Retira = $retira;
-
-            $seguro = new Seguro();
-            $seguro->Tipo = 'Remetente';
-
-            $integrarCTe->cte->Seguros = [$seguro];
-
-            $integrarCTe->cte->TipoCTe = 'Normal';
-            $integrarCTe->cte->TipoTomador = 'Remetente';
-            $integrarCTe->cte->TipoImpressao = 'Retrato';
-            $integrarCTe->cte->TipoPagamento = 'Pago';
-            $integrarCTe->cte->TipoServico = 'Normal';
-
-            $integrarCTe->cte->ValorAReceber = 1560.32;
-            $integrarCTe->cte->ValorFrete = 1540.32;
-            $integrarCTe->cte->ValorTotalMercadoria = 72554.04;
-            $integrarCTe->cte->ValorTotalPrestacaoServico = 1560.32;
-
-            $veiculo = new Veiculo();
-            $veiculo->Placa = 'FON2613';
-            $veiculo->Renavam = '12345678911';
-            $veiculo->UF = 'SC';
-
-            $integrarCTe->cte->Veiculos = [$veiculo];
-
-            $integrarCTe->cnpjEmpresaAdministradora = '13969629000196';
-
-            $integracaoCTe = new ConhecimentoDeTransporteEletronico('http://homo.multicte.com.br/WebServiceIntegracao/ConhecimentoDeTransporteEletronico.svc/definitions?wsdl', ['proxy_host' => "192.168.111.70", 'proxy_port' => 3128, 'trace' => true]);
-            $retorno = $integracaoCTe->integrarCTe(['IntegrarCTe' => $integrarCTe]);
-
-            var_dump($retorno);
-
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-        }
+        $this->conhecimentoDeTransporteEletronico = new ConhecimentoDeTransporteEletronico('http://191.234.187.10/Homolog/WebServiceIntegracaoCTe/ConhecimentoDeTransporteEletronico.svc/definitions?singlewsdl', ['proxy_host' => "192.168.111.70", 'proxy_port' => 3128, 'trace' => true]);
+        $this->integracaoCTe = new IntegracaoCTe('http://191.234.187.10/Homolog/WebServiceIntegracaoCTe/IntegracaoCTe.svc/definitions?singlewsdl', ['proxy_host' => "192.168.111.70", 'proxy_port' => 3128, 'trace' => true]);
+        $this->token = '7985b2ad-647c-438e-a6c2-9854d425c49d';
     }
 
-    public function testBuscarPorCodigoCTe()
+
+    public function testDeveriaIntegrarCTeSemErro()
+    {
+        $integrarCTe = new IntegrarCTe();
+
+        $integrarCTe->cte = new cte();
+
+        $integrarCTe->cte->CFOP = 6932;
+        $integrarCTe->cte->CodigoIBGECidadeInicioPrestacao = 3204104;
+        $integrarCTe->cte->CodigoIBGECidadeTerminoPrestacao = 1504422;
+
+        $componentesPrestacao = new ComponentesDaPrestacao();
+        $componentesPrestacao->Descricao = 'PEDAGIO';
+        $componentesPrestacao->IncluiBaseCalculoICMS = 'true';
+        $componentesPrestacao->IncluiValorAReceber = 'true';
+        $componentesPrestacao->Valor = 0.0;
+
+        $integrarCTe->cte->ComponentesDaPrestacao = $componentesPrestacao;
+
+        $integrarCTe->cte->DataPrevistaEntrega = '15/11/2016';
+
+        $destinatario = new Cliente();
+        $destinatario->Bairro = 'JDIM STA FRANCISCA';
+        $destinatario->CEP = '67200000';
+        $destinatario->CPFCNPJ = '01838723026355';
+        $destinatario->CodigoAtividade = 2;
+        $destinatario->CodigoIBGECidade = 1504422;
+        $destinatario->CodigoPais = 1058;
+        $destinatario->Endereco = 'RUA DO URIBOCA VELHA';
+        $destinatario->Exportacao = false;
+        $destinatario->NomeFantasia = 'BRF S.A. FILIAL DE VENDAS BELE';
+        $destinatario->Numero = '1158';
+        $destinatario->IE = '152823697';
+        $destinatario->RazaoSocial = 'BRF S.A';
+
+        $integrarCTe->cte->Destinatario = $destinatario;
+
+        $documento = new Documentos();
+        $documento->ChaveNFE = '35160207170943004603551000001769801046971548';
+        $documento->DataEmissao = '05/02/2016 13:32:33';
+        $documento->Numero = 176980;
+        $documento->Valor = 72554.04;
+
+        $integrarCTe->cte->Documentos = [$documento];
+
+        $emitente = new Empresa();
+        $emitente->Atualizar = false;
+        $emitente->CNPJ = '25255622000191';
+
+        $integrarCTe->cte->Emitente = $emitente;
+
+        $icms = new Imposto();
+        $icms->Aliquota = 12.00;
+        $icms->BaseCalculo = 1540.32;
+        $icms->CST = '00';
+        $icms->Valor = 184.84;
+
+        $integrarCTe->cte->ICMS = $icms;
+
+        $integrarCTe->cte->IncluirICMSNoFrete = 'Nao';
+
+        $integrarCTe->cte->Lotacao = 'Sim';
+
+        $motorista = new Motorista();
+        $motorista->CPF = '03911009550';
+        $motorista->Nome = 'FABRICIO BARBOSA';
+
+        $integrarCTe->cte->Motoristas = [$motorista];
+
+        $integrarCTe->cte->NumeroCarga = 5213;
+        $integrarCTe->cte->NumeroUnidade = 10;
+
+        $integrarCTe->cte->ObservacoesGerais = 'N.F.: 176980 CNF: 182071 CARGA: 537837 - CTE DE TESTE';
+        $integrarCTe->cte->ProdutoPredominante = 'DIVERSOS';
+
+        $quantidadesCarga = new QuantidadesCarga();
+        $quantidadesCarga->Descricao = 'Kilogramas';
+        $quantidadesCarga->Quantidade = 1000;
+        $quantidadesCarga->UnidadeMedida = '01';
+
+        $integrarCTe->cte->QuantidadesCarga = [$quantidadesCarga];
+
+        $remetente = new Cliente();
+        $remetente->Bairro = 'CENTRO';
+        $remetente->CEP = '29980000';
+        $remetente->CPFCNPJ = '31743818000128';
+        $remetente->CodigoAtividade = 3;
+        $remetente->CodigoIBGECidade = 3204104;
+        $remetente->CodigoPais = 1058;
+        $remetente->Endereco = 'R CARLOS CASTRO';
+        $remetente->Exportacao = 0;
+        $remetente->NomeFantasia = 'MOVEIS SIMONETTI';
+        $remetente->Numero = '245 A';
+        $remetente->IE = '081219199';
+        $remetente->RazaoSocial = 'LOJAS SIMONETTI LTDA';
+
+        $integrarCTe->cte->Remetente = $remetente;
+
+        $retira = 'Nao';
+        $integrarCTe->cte->Retira = $retira;
+
+        $seguro = new Seguro();
+        $seguro->Tipo = 'Remetente';
+
+        $integrarCTe->cte->Seguros = [$seguro];
+
+        $integrarCTe->cte->TipoCTe = 'Normal';
+        $integrarCTe->cte->TipoTomador = 'Remetente';
+        $integrarCTe->cte->TipoImpressao = 'Retrato';
+        $integrarCTe->cte->TipoPagamento = 'Pago';
+        $integrarCTe->cte->TipoServico = 'Normal';
+
+        $integrarCTe->cte->ValorAReceber = 1560.32;
+        $integrarCTe->cte->ValorFrete = 1540.32;
+        $integrarCTe->cte->ValorTotalMercadoria = 72554.04;
+        $integrarCTe->cte->ValorTotalPrestacaoServico = 1560.32;
+
+        $veiculo = new Veiculo();
+        $veiculo->Placa = 'FON2613';
+        $veiculo->Renavam = '12345678911';
+        $veiculo->UF = 'SC';
+
+        $integrarCTe->cte->Veiculos = [$veiculo];
+
+        $integrarCTe->cnpjEmpresaAdministradora = '13969629000196';
+
+        $integrarCTe->token = $this->token;
+
+        $retorno = $this->conhecimentoDeTransporteEletronico->integrarCTe(['IntegrarCTe' => $integrarCTe]);
+
+        $this->assertInstanceOf(\stdClass::class, $retorno);
+        $this->assertEquals(true, $retorno->IntegrarCTeResult->Status);
+        $this->assertEquals('integer', gettype($retorno->IntegrarCTeResult->Objeto));
+        $this->assertEquals('Integração realizada com sucesso.', $retorno->IntegrarCTeResult->Mensagem);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testDeveriaLancarExceptionDevidoFormatacaoErradaCampoMotorista()
+    {
+        $integrarCTe = new IntegrarCTe();
+
+        $integrarCTe->cte = new cte();
+
+        $integrarCTe->cte->CFOP = 6932;
+        $integrarCTe->cte->CodigoIBGECidadeInicioPrestacao = 3204104;
+        $integrarCTe->cte->CodigoIBGECidadeTerminoPrestacao = 1504422;
+
+        $componentesPrestacao = new ComponentesDaPrestacao();
+        $componentesPrestacao->Descricao = 'PEDAGIO';
+        $componentesPrestacao->IncluiBaseCalculoICMS = 'true';
+        $componentesPrestacao->IncluiValorAReceber = 'true';
+        $componentesPrestacao->Valor = 0.0;
+
+        $integrarCTe->cte->ComponentesDaPrestacao = $componentesPrestacao;
+
+        $integrarCTe->cte->DataPrevistaEntrega = '15/11/2016';
+
+        $destinatario = new Cliente();
+        $destinatario->Bairro = 'JDIM STA FRANCISCA';
+        $destinatario->CEP = '67200000';
+        $destinatario->CPFCNPJ = '01838723026355';
+        $destinatario->CodigoAtividade = 2;
+        $destinatario->CodigoIBGECidade = 1504422;
+        $destinatario->CodigoPais = 1058;
+        $destinatario->Endereco = 'RUA DO URIBOCA VELHA';
+        $destinatario->Exportacao = false;
+        $destinatario->NomeFantasia = 'BRF S.A. FILIAL DE VENDAS BELE';
+        $destinatario->Numero = '1158';
+        $destinatario->IE = '152823697';
+        $destinatario->RazaoSocial = 'BRF S.A';
+
+        $integrarCTe->cte->Destinatario = $destinatario;
+
+        $documento = new Documentos();
+        $documento->ChaveNFE = '35160207170943004603551000001769801046971548';
+        $documento->DataEmissao = '05/02/2016 13:32:33';
+        $documento->Numero = 176980;
+        $documento->Valor = 72554.04;
+
+        $integrarCTe->cte->Documentos = [$documento];
+
+        $emitente = new Empresa();
+        $emitente->Atualizar = false;
+        $emitente->CNPJ = '25255622000191';
+
+        $integrarCTe->cte->Emitente = $emitente;
+
+        $icms = new Imposto();
+        $icms->Aliquota = 12.00;
+        $icms->BaseCalculo = 1540.32;
+        $icms->CST = '00';
+        $icms->Valor = 184.84;
+
+        $integrarCTe->cte->ICMS = $icms;
+
+        $integrarCTe->cte->IncluirICMSNoFrete = 'Nao';
+
+        $integrarCTe->cte->Lotacao = 'Sim';
+
+        $motorista = new Motorista();
+        $motorista->CPF = '03911009550';
+        $motorista->Nome = 'FABRICIO BARBOSA';
+
+        $integrarCTe->cte->Motoristas = $motorista;
+
+        $integrarCTe->cte->NumeroCarga = 5213;
+        $integrarCTe->cte->NumeroUnidade = 10;
+
+        $integrarCTe->cte->ObservacoesGerais = 'N.F.: 176980 CNF: 182071 CARGA: 537837 - CTE DE TESTE';
+        $integrarCTe->cte->ProdutoPredominante = 'DIVERSOS';
+
+        $quantidadesCarga = new QuantidadesCarga();
+        $quantidadesCarga->Descricao = 'Kilogramas';
+        $quantidadesCarga->Quantidade = 1000;
+        $quantidadesCarga->UnidadeMedida = '01';
+
+        $integrarCTe->cte->QuantidadesCarga = [$quantidadesCarga];
+
+        $remetente = new Cliente();
+        $remetente->Bairro = 'CENTRO';
+        $remetente->CEP = '29980000';
+        $remetente->CPFCNPJ = '31743818000128';
+        $remetente->CodigoAtividade = 3;
+        $remetente->CodigoIBGECidade = 3204104;
+        $remetente->CodigoPais = 1058;
+        $remetente->Endereco = 'R CARLOS CASTRO';
+        $remetente->Exportacao = 0;
+        $remetente->NomeFantasia = 'MOVEIS SIMONETTI';
+        $remetente->Numero = '245 A';
+        $remetente->IE = '081219199';
+        $remetente->RazaoSocial = 'LOJAS SIMONETTI LTDA';
+
+        $integrarCTe->cte->Remetente = $remetente;
+
+        $retira = 'Nao';
+        $integrarCTe->cte->Retira = $retira;
+
+        $seguro = new Seguro();
+        $seguro->Tipo = 'Remetente';
+
+        $integrarCTe->cte->Seguros = [$seguro];
+
+        $integrarCTe->cte->TipoCTe = 'Normal';
+        $integrarCTe->cte->TipoTomador = 'Remetente';
+        $integrarCTe->cte->TipoImpressao = 'Retrato';
+        $integrarCTe->cte->TipoPagamento = 'Pago';
+        $integrarCTe->cte->TipoServico = 'Normal';
+
+        $integrarCTe->cte->ValorAReceber = 1560.32;
+        $integrarCTe->cte->ValorFrete = 1540.32;
+        $integrarCTe->cte->ValorTotalMercadoria = 72554.04;
+        $integrarCTe->cte->ValorTotalPrestacaoServico = 1560.32;
+
+        $veiculo = new Veiculo();
+        $veiculo->Placa = 'FON2613';
+        $veiculo->Renavam = '12345678911';
+        $veiculo->UF = 'SC';
+
+        $integrarCTe->cte->Veiculos = [$veiculo];
+
+        $integrarCTe->cnpjEmpresaAdministradora = '13969629000196';
+
+        $integrarCTe->token = $this->token;
+
+        $retorno = $this->conhecimentoDeTransporteEletronico->integrarCTe(['IntegrarCTe' => $integrarCTe]);
+
+        $this->assertInstanceOf(\stdClass::class, $retorno);
+        $this->assertEquals(false, $retorno->IntegrarCTeResult->Status);
+        $this->assertEquals('integer', gettype($retorno->IntegrarCTeResult->Objeto));
+    }
+
+    public function testDeveriaBuscarPorCodigoCTeSemErro()
     {
         $busca = new BuscarPorCodigoCTe();
-        $busca->codigoCTe = 277303;
+        $busca->codigoCTe = 37;
         $busca->tipoIntegracao = 'Emissao';
         $busca->tipoRetorno = 'XML_PDF';
+        $busca->token = $this->token;
 
-        $buscaCTe = new IntegracaoCTe('http://homo.multicte.com.br/WebServiceIntegracao/IntegracaoCTe.svc/definitions?wsdl', ['proxy_host' => "192.168.111.70", 'proxy_port' => 3128]);
-        $retorno = $buscaCTe->buscarPorCodigoCTe(['BuscarPorCodigoCTe' => $busca]);
+        $retorno = $this->integracaoCTe->buscarPorCodigoCTe(['BuscarPorCodigoCTe' => $busca]);
 
-        var_dump($retorno);
+        $this->assertInstanceOf(\stdClass::class, $retorno);
+        $this->assertEquals(true, $retorno->BuscarPorCodigoCTeResult->Status);
+        $this->assertInstanceOf(\stdClass::class, $retorno->BuscarPorCodigoCTeResult->Objeto);
+        $this->assertEquals(IntegracaoCTe::STATUS_AUTORIZADO, $retorno->BuscarPorCodigoCTeResult->Objeto->StatusCTe);
+    }
+
+
+    public function testDeveriaGerarTrazerObjetoNullDevidoAoCodigoInexistente()
+    {
+        $busca = new BuscarPorCodigoCTe();
+        $busca->codigoCTe = -1;
+        $busca->tipoIntegracao = 'Emissao';
+        $busca->tipoRetorno = 'XML_PDF';
+        $busca->token = $this->token;
+
+        $retorno = $this->integracaoCTe->buscarPorCodigoCTe(['BuscarPorCodigoCTe' => $busca]);
+
+        $this->assertInstanceOf(\stdClass::class, $retorno);
+        $this->assertEquals(true, $retorno->BuscarPorCodigoCTeResult->Status);
+        $this->assertNull($retorno->BuscarPorCodigoCTeResult->Objeto);
 
     }
 
-    public function testReenviarCTe()
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testDeveriaGerarExcecaoDevidoStatusDaCTe()
     {
-        try {
-            $alterarCTe = new AlterarCTe();
+        $alterarCTe = new AlterarCTe();
 
-            $alterarCTe->codigoCTe = 277303;
-            $alterarCTe->cnpjEmpresaAdministradora = '13969629000196';
+        $alterarCTe->codigoCTe = 37;
+        $alterarCTe->cnpjEmpresaAdministradora = '13969629000196';
+        $alterarCTe->token = $this->token;
 
-            $integracaoCTe = new ConhecimentoDeTransporteEletronico('http://homo.multicte.com.br/WebServiceIntegracao/ConhecimentoDeTransporteEletronico.svc/definitions?wsdl', ['proxy_host' => "192.168.111.70", 'proxy_port' => 3128, 'trace' => true]);
-            $retorno = $integracaoCTe->reenviarCTe(['AlterarCTe' => $alterarCTe]);
-
-            var_dump($retorno);
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-        }
+        $retorno = $this->conhecimentoDeTransporteEletronico->reenviarCTe(['AlterarCTe' => $alterarCTe]);
     }
 
-    public function testAlterarDadosCTe()
+    /**
+     * @expectedException \Exception
+     */
+    public function testDeveriaGerarExceptionDevidoCodigoCTe()
     {
-        try {
-            $alterarCTe = new AlterarCTe();
 
-            $alterarCTe->codigoCTe = 277303;
-            $alterarCTe->cnpjEmpresaAdministradora = '13969629000196';
+        $alterarCTe = new AlterarCTe();
 
-            $cte = new cte();
+        $alterarCTe->codigoCTe = -1;
+        $alterarCTe->cnpjEmpresaAdministradora = '13969629000196';
 
-            $cte->CFOP = 6932;
-            $cte->CodigoIBGECidadeInicioPrestacao = 3204104;
-            $cte->CodigoIBGECidadeTerminoPrestacao = 1504422;
+        $cte = new cte();
 
-            $componentesPrestacao = new ComponentesDaPrestacao();
-            $componentesPrestacao->Descricao = 'PEDAGIO';
-            $componentesPrestacao->IncluiBaseCalculoICMS = 'true';
-            $componentesPrestacao->IncluiValorAReceber = 'true';
-            $componentesPrestacao->Valor = 0.0;
+        $cte->CFOP = 6932;
+        $cte->CodigoIBGECidadeInicioPrestacao = 3204104;
+        $cte->CodigoIBGECidadeTerminoPrestacao = 1504422;
 
-            $cte->ComponentesDaPrestacao = $componentesPrestacao;
+        $componentesPrestacao = new ComponentesDaPrestacao();
+        $componentesPrestacao->Descricao = 'PEDAGIO';
+        $componentesPrestacao->IncluiBaseCalculoICMS = 'true';
+        $componentesPrestacao->IncluiValorAReceber = 'true';
+        $componentesPrestacao->Valor = 0.0;
 
-            $cte->DataPrevistaEntrega = '15/11/2016';
+        $cte->ComponentesDaPrestacao = $componentesPrestacao;
 
-            $destinatario = new Cliente();
-            $destinatario->Bairro = 'JDIM STA FRANCISCA';
-            $destinatario->CEP = '67200000';
-            $destinatario->CPFCNPJ = '01838723026355';
-            $destinatario->CodigoAtividade = 2;
-            $destinatario->CodigoIBGECidade = 1504422;
-            $destinatario->CodigoPais = 1058;
-            $destinatario->Endereco = 'RUA DO URIBOCA VELHA';
-            $destinatario->Exportacao = false;
-            $destinatario->NomeFantasia = 'BRF S.A. FILIAL DE VENDAS BELE';
-            $destinatario->Numero = '1158';
-            $destinatario->IE = '152823697';
-            $destinatario->RazaoSocial = 'BRF S.A';
+        $cte->DataPrevistaEntrega = '15/11/2016';
 
-            $cte->Destinatario = $destinatario;
+        $destinatario = new Cliente();
+        $destinatario->Bairro = 'JDIM STA FRANCISCA';
+        $destinatario->CEP = '67200000';
+        $destinatario->CPFCNPJ = '01838723026355';
+        $destinatario->CodigoAtividade = 2;
+        $destinatario->CodigoIBGECidade = 1504422;
+        $destinatario->CodigoPais = 1058;
+        $destinatario->Endereco = 'RUA DO URIBOCA VELHA';
+        $destinatario->Exportacao = false;
+        $destinatario->NomeFantasia = 'BRF S.A. FILIAL DE VENDAS BELE';
+        $destinatario->Numero = '1158';
+        $destinatario->IE = '152823697';
+        $destinatario->RazaoSocial = 'BRF S.A';
 
-            $documento = new Documentos();
-            $documento->ChaveNFE = '35160207170943004603551000001769801046971548';
-            $documento->DataEmissao = '05/02/2016 13:32:33';
-            $documento->Numero = 176980;
-            $documento->Valor = 72554.04;
+        $cte->Destinatario = $destinatario;
 
-            $cte->Documentos = [$documento];
+        $documento = new Documentos();
+        $documento->ChaveNFE = '35160207170943004603551000001769801046971548';
+        $documento->DataEmissao = '05/02/2016 13:32:33';
+        $documento->Numero = 176980;
+        $documento->Valor = 72554.04;
 
-            $emitente = new Empresa();
-            $emitente->Atualizar = false;
-            $emitente->CNPJ = '25255622000191';
+        $cte->Documentos = [$documento];
 
-            $cte->Emitente = $emitente;
+        $emitente = new Empresa();
+        $emitente->Atualizar = false;
+        $emitente->CNPJ = '25255622000191';
 
-            $icms = new Imposto();
-            $icms->Aliquota = 12.00;
-            $icms->BaseCalculo = 1540.32;
-            $icms->CST = '00';
-            $icms->Valor = 184.84;
+        $cte->Emitente = $emitente;
 
-            $cte->ICMS = $icms;
+        $icms = new Imposto();
+        $icms->Aliquota = 12.00;
+        $icms->BaseCalculo = 1540.32;
+        $icms->CST = '00';
+        $icms->Valor = 184.84;
 
-            $cte->IncluirICMSNoFrete = 'Nao';
+        $cte->ICMS = $icms;
 
-            $cte->Lotacao = 'Sim';
+        $cte->IncluirICMSNoFrete = 'Nao';
 
-            $motorista = new Motorista();
-            $motorista->CPF = '03911009550';
-            $motorista->Nome = 'FABRICIO BARBOSA';
+        $cte->Lotacao = 'Sim';
 
-            $cte->Motoristas = [$motorista];
+        $motorista = new Motorista();
+        $motorista->CPF = '03911009550';
+        $motorista->Nome = 'FABRICIO BARBOSA';
 
-            $cte->NumeroCarga = 5213;
-            $cte->NumeroUnidade = 10;
+        $cte->Motoristas = [$motorista];
 
-            $cte->ObservacoesGerais = 'N.F.: 176980 CNF: 182071 CARGA: 537837 - CTE DE TESTE';
-            $cte->ProdutoPredominante = 'DIVERSOS';
+        $cte->NumeroCarga = 5213;
+        $cte->NumeroUnidade = 10;
 
-            $quantidadesCarga = new QuantidadesCarga();
-            $quantidadesCarga->Descricao = 'Kilogramas';
-            $quantidadesCarga->Quantidade = 1000;
-            $quantidadesCarga->UnidadeMedida = '01';
+        $cte->ObservacoesGerais = 'N.F.: 176980 CNF: 182071 CARGA: 537837 - CTE DE TESTE';
+        $cte->ProdutoPredominante = 'DIVERSOS';
 
-            $cte->QuantidadesCarga = [$quantidadesCarga];
+        $quantidadesCarga = new QuantidadesCarga();
+        $quantidadesCarga->Descricao = 'Kilogramas';
+        $quantidadesCarga->Quantidade = 1000;
+        $quantidadesCarga->UnidadeMedida = '01';
 
-            $remetente = new Cliente();
-            $remetente->Bairro = 'CENTRO';
-            $remetente->CEP = '29980000';
-            $remetente->CPFCNPJ = '31743818000128';
-            $remetente->CodigoAtividade = 3;
-            $remetente->CodigoIBGECidade = 3204104;
-            $remetente->CodigoPais = 1058;
-            $remetente->Endereco = 'R CARLOS CASTRO';
-            $remetente->Exportacao = 0;
-            $remetente->NomeFantasia = 'MOVEIS SIMONETTI';
-            $remetente->Numero = '245 A';
-            $remetente->IE = '081219199';
-            $remetente->RazaoSocial = 'LOJAS SIMONETTI LTDA';
+        $cte->QuantidadesCarga = [$quantidadesCarga];
 
-            $cte->Remetente = $remetente;
+        $remetente = new Cliente();
+        $remetente->Bairro = 'CENTRO';
+        $remetente->CEP = '29980000';
+        $remetente->CPFCNPJ = '31743818000128';
+        $remetente->CodigoAtividade = 3;
+        $remetente->CodigoIBGECidade = 3204104;
+        $remetente->CodigoPais = 1058;
+        $remetente->Endereco = 'R CARLOS CASTRO';
+        $remetente->Exportacao = 0;
+        $remetente->NomeFantasia = 'MOVEIS SIMONETTI';
+        $remetente->Numero = '245 A';
+        $remetente->IE = '081219199';
+        $remetente->RazaoSocial = 'LOJAS SIMONETTI LTDA';
 
-            $retira = 'Nao';
-            $cte->Retira = $retira;
+        $cte->Remetente = $remetente;
 
-            $seguro = new Seguro();
-            $seguro->Tipo = 'Remetente';
+        $retira = 'Nao';
+        $cte->Retira = $retira;
 
-            $cte->Seguros = [$seguro];
+        $seguro = new Seguro();
+        $seguro->Tipo = 'Remetente';
 
-            $cte->TipoCTe = 'Normal';
-            $cte->TipoTomador = 'Remetente';
-            $cte->TipoImpressao = 'Retrato';
-            $cte->TipoPagamento = 'Pago';
-            $cte->TipoServico = 'Normal';
+        $cte->Seguros = [$seguro];
 
-            $cte->ValorAReceber = 1560.32;
-            $cte->ValorFrete = 1540.32;
-            $cte->ValorTotalMercadoria = 72554.04;
-            $cte->ValorTotalPrestacaoServico = 1560.32;
+        $cte->TipoCTe = 'Normal';
+        $cte->TipoTomador = 'Remetente';
+        $cte->TipoImpressao = 'Retrato';
+        $cte->TipoPagamento = 'Pago';
+        $cte->TipoServico = 'Normal';
 
-            $veiculo = new Veiculo();
-            $veiculo->Placa = 'FON2613';
-            $veiculo->Renavam = '12345678911';
-            $veiculo->UF = 'SC';
+        $cte->ValorAReceber = 1560.32;
+        $cte->ValorFrete = 1540.32;
+        $cte->ValorTotalMercadoria = 72554.04;
+        $cte->ValorTotalPrestacaoServico = 1560.32;
 
-            $cte->Veiculos = [$veiculo];
+        $veiculo = new Veiculo();
+        $veiculo->Placa = 'FON2613';
+        $veiculo->Renavam = '12345678911';
+        $veiculo->UF = 'SC';
 
-            $alterarCTe->cte = $cte;
+        $cte->Veiculos = [$veiculo];
 
+        $alterarCTe->cte = $cte;
 
-
-            $integracaoCTe = new ConhecimentoDeTransporteEletronico('http://homo.multicte.com.br/WebServiceIntegracao/ConhecimentoDeTransporteEletronico.svc/definitions?wsdl', ['proxy_host' => "192.168.111.70", 'proxy_port' => 3128, 'trace' => true]);
-            $retorno = $integracaoCTe->alterarDadosCTe(['AlterarCTe' => $alterarCTe]);
-
-            var_dump($retorno);
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-        }
+        $retorno = $this->conhecimentoDeTransporteEletronico->alterarDadosCTe(['AlterarCTe' => $alterarCTe]);
     }
 
 }
