@@ -22,10 +22,17 @@ class IntegracaoCTe extends \SoapClient
 
     /**
      * @param array $parameters
-     * @return \stdClass
+     * @return mixed
+     * @throws \Exception
      */
     public function buscarPorCodigoCTe(array $parameters)
     {
-        return $this->__soapCall('BuscarPorCodigoCTe', $parameters);
+        $retorno = $this->__soapCall('BuscarPorCodigoCTe', $parameters);
+
+        if (!$retorno->BuscarPorCodigoCTeResult->Status) {
+            throw new \Exception('Erro ao buscar CT-e : ' . $retorno->BuscarPorCodigoCTeResult->Mensagem . "\n");
+        }
+
+        return $retorno;
     }
 }
