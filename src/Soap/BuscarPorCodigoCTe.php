@@ -23,4 +23,9 @@ class BuscarPorCodigoCTe
      * @var string
      */
     public $tipoRetorno;
+
+    /**
+     * @var string
+     */
+    public $token;
 }

@@ -23,4 +23,9 @@ class AlterarCTe
      */
     public $cnpjEmpresaAdministradora;
 
+    /**
+     * @var string
+     */
+    public $token;
+
 }

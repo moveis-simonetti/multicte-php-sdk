@@ -18,4 +18,9 @@ class IntegrarCTe
      * @var string
      */
     public $cnpjEmpresaAdministradora;
+
+    /**
+     * @var string
+     */
+    public $token;
 }
