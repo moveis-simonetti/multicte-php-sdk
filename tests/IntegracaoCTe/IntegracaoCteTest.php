@@ -174,6 +174,8 @@ class IntegracaoCteTest extends \PHPUnit_Framework_TestCase
 
         $retorno = $this->conhecimentoDeTransporteEletronico->integrarCTe(['IntegrarCTe' => $integrarCTe]);
 
+        var_dump($retorno);
+
         $this->assertInstanceOf(\stdClass::class, $retorno);
         $this->assertEquals(true, $retorno->IntegrarCTeResult->Status);
         $this->assertEquals('integer', gettype($retorno->IntegrarCTeResult->Objeto));
