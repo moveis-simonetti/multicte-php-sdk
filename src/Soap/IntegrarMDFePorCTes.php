@@ -23,4 +23,9 @@ class IntegrarMDFePorCTes
      */
     public $cnpjEmpresaPai;
 
+    /**
+     * @var string
+     */
+    public $token;
+
 }

@@ -23,4 +23,9 @@ class BuscarPorCodigoMDFe
      * @var string
      */
     public $tipoRetorno;
+
+    /**
+     * @var string
+     */
+    public $token;
 }

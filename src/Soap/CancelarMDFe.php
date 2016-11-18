@@ -23,4 +23,9 @@ class CancelarMDFe
      */
     public $codigoMDFe;
 
+    /**
+     * @var string
+     */
+    public $token;
+
 }

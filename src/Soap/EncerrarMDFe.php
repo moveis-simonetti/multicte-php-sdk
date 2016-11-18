@@ -28,4 +28,9 @@ class EncerrarMDFe
      */
     public $codigoIBGEMunicipioEncerramento;
 
+    /**
+     * @var string
+     */
+    public $token;
+
 }
