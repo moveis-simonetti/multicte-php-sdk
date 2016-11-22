@@ -9,7 +9,7 @@
 namespace Simonetti\MultiCTe\Soap;
 
 
-class cte
+class CTe
 {
     /**
      * @var int

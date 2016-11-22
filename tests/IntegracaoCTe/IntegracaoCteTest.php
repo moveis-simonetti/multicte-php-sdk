@@ -5,7 +5,7 @@ namespace Tests\IntegracaoCTe;
 
 use phpDocumentor\Reflection\Types\Integer;
 use Simonetti\MultiCTe\Soap\AlterarCTe;
-use Simonetti\MultiCTe\Soap\cte;
+use Simonetti\MultiCTe\Soap\CTe;
 use Simonetti\MultiCTe\Soap\IntegracaoCTe;
 use Simonetti\MultiCTe\Soap\BuscarPorCodigoCTe;
 use Simonetti\MultiCTe\Soap\ConhecimentoDeTransporteEletronico;
@@ -49,7 +49,7 @@ class IntegracaoCteTest extends \PHPUnit_Framework_TestCase
     {
         $integrarCTe = new IntegrarCTe();
 
-        $integrarCTe->cte = new cte();
+        $integrarCTe->cte = new CTe();
 
         $integrarCTe->cte->CFOP = 6932;
         $integrarCTe->cte->CodigoIBGECidadeInicioPrestacao = 3204104;
@@ -189,7 +189,7 @@ class IntegracaoCteTest extends \PHPUnit_Framework_TestCase
     {
         $integrarCTe = new IntegrarCTe();
 
-        $integrarCTe->cte = new cte();
+        $integrarCTe->cte = new CTe();
 
         $integrarCTe->cte->CFOP = 6932;
         $integrarCTe->cte->CodigoIBGECidadeInicioPrestacao = 3204104;
@@ -378,7 +378,7 @@ class IntegracaoCteTest extends \PHPUnit_Framework_TestCase
         $alterarCTe->codigoCTe = -1;
         $alterarCTe->cnpjEmpresaAdministradora = '13969629000196';
 
-        $cte = new cte();
+        $cte = new CTe();
 
         $cte->CFOP = 6932;
         $cte->CodigoIBGECidadeInicioPrestacao = 3204104;

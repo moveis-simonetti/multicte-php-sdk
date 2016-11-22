@@ -9,6 +9,21 @@ namespace Simonetti\MultiCTe\Soap;
  */
 class ConhecimentoDeTransporteEletronico extends \SoapClient
 {
+    private static $classmap = [
+        "cte" => "CTe"
+    ];
+
+    public function __construct($wsdl, array $options = array())
+    {
+        foreach (self::$classmap as $key => $value) {
+            if (!isset($options['classmap'][$key])) {
+                $options['classmap'][$key] = $value;
+            }
+        }
+
+        parent::__construct($wsdl, $options);
+    }
+
     /**
      * @param array $parameters
      * @return \stdClass
