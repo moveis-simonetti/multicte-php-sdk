@@ -71,4 +71,15 @@ class ConhecimentoDeTransporteEletronico extends \SoapClient
 
         return $retorno;
     }
+
+    public function cancelarCTe(array $parameters)
+    {
+        $retorno = $this->__soapCall('CancelarCTe', $parameters);
+
+        if (!$retorno->CancelarCTeResult->Status) {
+            throw new \Exception('Erro ao cancelar CT-e : ' . $retorno->CancelarCTeResult->Mensagem . "\n");
+        }
+
+        return $retorno;
+    }
 }

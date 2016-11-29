@@ -5,6 +5,7 @@ namespace Tests\IntegracaoCTe;
 
 use phpDocumentor\Reflection\Types\Integer;
 use Simonetti\MultiCTe\Soap\AlterarCTe;
+use Simonetti\MultiCTe\Soap\CancelarCTe;
 use Simonetti\MultiCTe\Soap\CTe;
 use Simonetti\MultiCTe\Soap\IntegracaoCTe;
 use Simonetti\MultiCTe\Soap\BuscarPorCodigoCTe;
@@ -51,7 +52,7 @@ class IntegracaoCteTest extends \PHPUnit_Framework_TestCase
 
         $integrarCTe->cte = new CTe();
 
-        $integrarCTe->cte->CFOP = 6932;
+
         $integrarCTe->cte->CodigoIBGECidadeInicioPrestacao = 3204104;
         $integrarCTe->cte->CodigoIBGECidadeTerminoPrestacao = 1504422;
 
@@ -63,7 +64,7 @@ class IntegracaoCteTest extends \PHPUnit_Framework_TestCase
 
         $integrarCTe->cte->ComponentesDaPrestacao = $componentesPrestacao;
 
-        $integrarCTe->cte->DataPrevistaEntrega = '15/11/2016';
+        $integrarCTe->cte->DataPrevistaEntrega = '30/11/2016';
 
         $destinatario = new Cliente();
         $destinatario->Bairro = 'JDIM STA FRANCISCA';
@@ -181,6 +182,7 @@ class IntegracaoCteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('integer', gettype($retorno->IntegrarCTeResult->Objeto));
         $this->assertEquals('Integração realizada com sucesso.', $retorno->IntegrarCTeResult->Mensagem);
     }
+
 
     /**
      * @expectedException \Exception
@@ -322,7 +324,7 @@ class IntegracaoCteTest extends \PHPUnit_Framework_TestCase
     public function testDeveriaBuscarPorCodigoCTeSemErro()
     {
         $busca = new BuscarPorCodigoCTe();
-        $busca->codigoCTe = 37;
+        $busca->codigoCTe = 2058;
         $busca->tipoIntegracao = 'Emissao';
         $busca->tipoRetorno = 'XML_PDF';
         $busca->token = $this->token;
@@ -500,6 +502,22 @@ class IntegracaoCteTest extends \PHPUnit_Framework_TestCase
         $alterarCTe->cte = $cte;
 
         $retorno = $this->conhecimentoDeTransporteEletronico->alterarDadosCTe(['AlterarCTe' => $alterarCTe]);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testCancelarDeveriaGerarExcecaoDevidoStatusDaCTe()
+    {
+        $cancelarCTe = new CancelarCTe();
+        $cancelarCTe->chaveCTe = '32161125255622000191570010000000281000000287';
+        $cancelarCTe->justificativa = 'Teste de cancelamento de cte';
+        $cancelarCTe->cnpjEmpresaAdministradora = '13969629000196';
+        $cancelarCTe->token = $this->token;
+
+        $retorno = $this->conhecimentoDeTransporteEletronico->cancelarCTe(['CancelarCTe' => $cancelarCTe]);
+
+        var_dump($retorno);
     }
 
 }
