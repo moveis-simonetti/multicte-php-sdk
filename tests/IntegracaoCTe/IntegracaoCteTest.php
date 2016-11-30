@@ -334,7 +334,7 @@ class IntegracaoCteTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\stdClass::class, $retorno);
         $this->assertEquals(true, $retorno->BuscarPorCodigoCTeResult->Status);
         $this->assertInstanceOf(\stdClass::class, $retorno->BuscarPorCodigoCTeResult->Objeto);
-        $this->assertEquals(IntegracaoCTe::STATUS_AUTORIZADO, $retorno->BuscarPorCodigoCTeResult->Objeto->StatusCTe);
+        $this->assertEquals(IntegracaoCTe::STATUS_CANCELADO, $retorno->BuscarPorCodigoCTeResult->Objeto->StatusCTe);
     }
 
 
