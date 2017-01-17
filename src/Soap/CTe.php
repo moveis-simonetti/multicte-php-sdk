@@ -42,6 +42,11 @@ class CTe
     public $Destinatario;
 
     /**
+     * @var Cliente
+     */
+    public $Recebedor;
+
+    /**
      * @var Documentos
      */
     public $Documentos;
